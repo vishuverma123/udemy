@@ -6,14 +6,13 @@ metadata:
     app: vprodb
 spec:
   selector:
-    matchlabels: 
+    matchLabels:  # Fix: Use "matchLabels" with uppercase "L"
       app: vprodb
   replicas: 1
   template:
     metadata:
       labels:
         app: vprodb
-
     spec:
       containers:
       - name: vprodb
@@ -24,24 +23,23 @@ spec:
         ports:
         - name: vprodb-port
           containerPort: 3306
-        env: 
+        env:
           - name: MYSQL_ROOT_PASSWORD
             valueFrom:
-              SecretKeyRef:
+              secretKeyRef:
                 name: app-secret
-                key: db-pass:
+                key: db-pass  # Fix: Removed the colon ":" at the end
 
-      volumes: 
+      volumes:
       - name: vpro-db-data
         awsElasticBlockStore:
           volumeID: vol-088f428888e73319d
           fsType: ext4
-      
-      InitContainers:
+
+      initContainers:  # Fix: Changed from InitContainers to initContainers (lowercase "i")
       - name: busybox
         image: busybox:latest
         args: ["rm", "-rf", "/var/lib/mysql/lost+found"]
         volumeMounts:
         - name: vpro-db-data
           mountPath: /var/lib/mysql
-
